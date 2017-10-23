@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+   <head>
+      <title>Quicksort visualisation</title>
+	  <script src="script.js"></script>
+   </head>
+	
+   <body>
+	<H1 align="center"> Shell sort visualisation</H1>
+	<div id="first stage">
+	<p align = "center"> <b>Please enter the amount of elements in array to sort (default is set to 10).<b></p>
+	<p align = "center"> <b>It should be between 10 and 30, on any other input default will be chosen.<b></p>
+	<table border="0" align="center" cellpadding="0" cellspacing="0">
+		<tr>
+			<td><input type="number" id="Ninput"></td>
+			<td><input type="button" value="ok" onclick="initialize()"></td>
+		</tr>
+	</table>
+
+	</div>
+
+
+	<div id="second stage" style="display: none;">
+		<p align = "center"> <b>Choose 2 numbers which will make a base for Shellsort<b></p>
+		<p align = "center"> <b>Shellsort uses 3 numbers usually, but the last one is always 1<b></p>
+		<p align = "center"> <b>If you do not fullfill requirements below, the defaul will be chosen (5 and 3)<b></p>
+		<table align="center">
+                    <tr> 
+                        <td>First number should be at least 2 times smaller than array size</td>
+                        <td><input type="number" id="N1input"></td>
+                        <th rowspan="2"><input type="button" value="ok" onclick="algorithmLauncher()"></th>
+                    </tr>
+                    <tr> 
+                        <td>Second number must be smaller than the first one</td>
+                        <td><input type="number" id="N2input"></td>
+                    </tr>
+                </table>
+	</div>
+	
+	<div id="third stage" style="display: none;">
+			<table align="center">
+			<tr>
+				<td><input type="button" id="start_animation" onclick="start()" value="start"></td>
+				<td><input type="range" min="1" max ="5" id="set_speed" value="speed" list="tickmarks"></td>
+				<datalist id="tickmarks">
+					<option value="0" label="min">
+					<option value="50" label="speed">
+					<option value="100" label="max">
+				</datalist>
+				<td><input type="button" id="stop_animation" onclick="stop()" value="stop"></td>
+			</tr>
+				<th colspan="3"> <canvas id='main' align="center"></canvas></th>
+			</tr>
+			</table>
+        </div>
+	
+		
+   </body>
+	
+</html>
