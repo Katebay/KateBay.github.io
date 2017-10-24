@@ -35,10 +35,13 @@ function algorithmLauncher() {
         var bars;
         
         // setting up defauls if variables did not fullfill the criteria
-        if (N<10 || N>30 || N == ""){
-            N=10;
+        if (N<10 || N>30 || N == ""){
+
+            N=10;
+
         }
         N=parseInt(N,10);
+		console.log(N);
         if (d0 == "") {
             d0=Math.floor(N/2);
         } else {
@@ -62,9 +65,12 @@ function algorithmLauncher() {
 		console.log(d1)
         
         // setting up random array of length N
-        for (i = 0; i < N; i++) { 
-            arraytosort.push(Math.floor(Math.random()*maxVal));
-        }
+        for (i = 0; i < N; i++) { 
+
+            arraytosort.push(Math.floor(Math.random()*maxVal));
+
+        }
+
         initialarray=arraytosort.slice();
         
         //setting up visualisation
@@ -81,16 +87,106 @@ function algorithmLauncher() {
 		shellsortanimationdata(arraytosort,[d0,d1,1],memory,highlightmemory);
 		arraytosort=initialarray;
 		draw(arraytosort);
+		console.log(memory);
 		
 	
 	//	
 		
 }
 
+function draw_initial(){
+	if (started == 1) {
+		return
+	}
+	var	array=memory[0];
+	draw(array);
+}
+
+function do_step(){
+	if (started == 1){
+		return;}
+	currentPeriod=1000/document.getElementById("set_speed").value;
+	console.log("test");
+	if (currentstage < memory.length-1){
+		shellsortstep();
+
+	} else if ((currentstage == memory.length-1) && (currenti == 0)){
+		storedarray=memory[currentstage].slice();
+		draw(memory[currentstage]);
+		insertionsortstep();
+	} else {
+		insertionsortstep();
+	}
+		
+	
+
+}
+
+function shellsortstep(){
+	tickTimer=setTimeout(function tick() {
+		draw(memory[currentstage],highlightmemory[currentstage]);
+			tackTimer=setTimeout(function tack() {
+				draw(memory[currentstage+1],highlightmemory[currentstage]);
+				currentstage++;
+				if (currentstage==memory.length-1){
+					storedarray=memory[currentstage].slice();
+					stop();
+				}
+			},currentPeriod);
+},currentPeriod);
+
+}
+
+function insertionsortstep(){
+	unsortedList=storedarray.slice();
+    var len = unsortedList.length;
+	var leftmove=0;
+	var i = currenti;
+	var tmp = unsortedList[i]; //Copy of the current element. 
+	nexttimeout+=currentPeriod+50;
+	insertionSortTimeouts.push(setTimeout(moveelementup,nexttimeout,tmp,i));
+	/*Check through the sorted part and compare with the number in tmp. If large, shift the number*/
+	var leftmove=0;
+	for (var j = i - 1; j >= 0 && (unsortedList[j] > tmp); j--) {
+	//Shift the number
+		nexttimeout+=currentPeriod+50;
+		insertionSortTimeouts.push(setTimeout(moveelementright,nexttimeout,unsortedList[j],j));
+		leftmove+=1;
+		unsortedList[j + 1] = unsortedList[j];			
+	}
+	//Insert the copied number at the correct position
+	//in sorted part. 
+	nexttimeout+=currentPeriod+50;
+	console.log(i,j,leftmove);	
+	insertionSortTimeouts.push(setTimeout(moveelementleft,nexttimeout,tmp,i,leftmove));
+	console.log(i-j);
+	nexttimeout+=currentPeriod+50;
+	insertionSortTimeouts.push(setTimeout(moveelementdown,nexttimeout,tmp,j+1));
+	unsortedList[j + 1] = tmp;
+	currenti++;
+	storedarray=unsortedList.slice();
+	nexttimeout=0;
+
+}
+
+function reset(){
+	stop();
+	currentstage=0;
+	storedarray=[];
+	currenti=0;
+    (document.getElementById("third stage")).style="display: none;";
+    (document.getElementById("first stage")).style="display: block;";
+	canvas=null;
+	ctx=null;
+	memory=[];
+	highlightmemory=[];
+}
+
 function draw(array,highlight = emptyhighlight){
     N=array.length;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (i = 0; i < N; i++) { 
+    for (i = 0; i < N; i++) { 
+
         ctx.beginPath();
         ctx.rect(width*i,canvas.height-array[i],width,array[i]);
         if (highlight[i] == 'o'){
